@@ -11,6 +11,9 @@ inputs:
   subscription_id:
     description: "Azure subscription Id"
     required: true
+  pat_token:
+    description: "GitHub PAT token to access to APIs to manage self hosted runner"
+    required: true
   container_app_environment_name:
     description: "Azure container app environment name"
     required: true
@@ -54,7 +57,7 @@ runs:
           GITHUB_TOKEN=$(curl \
             -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.BOT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ inputs.pat_token }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/runners/registration-token | jq ".token" -r)
 
           az config set extension.use_dynamic_install=yes_without_prompt
@@ -73,12 +76,12 @@ runs:
 
           GITHUB_RUNNER_ID=$(curl \
               -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.BOT_TOKEN }}" \
+              -H "Authorization: Bearer ${{ inputs.pat_token }}" \
               https://api.github.com/repos/${{ github.repository }}/actions/runners | jq '.runners | map(select(.name | startswith("'${AZURE_CONTAINER_APP_NAME}'"))) | .[].id' -r)
 
           curl \
             -X PUT \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.BOT_TOKEN }}" \
+            -H "Authorization: Bearer ${{ inputs.pat_token }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/runners/${GITHUB_RUNNER_ID}/labels \
             -d '{"labels":["'${AZURE_CONTAINER_APP_NAME}'"]}'
