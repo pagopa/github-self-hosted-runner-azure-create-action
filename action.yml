@@ -56,7 +56,7 @@ runs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.BOT_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/runners/registration-token | jq ".token" -r)
-            
+
           az config set extension.use_dynamic_install=yes_without_prompt
 
           az containerapp create \
