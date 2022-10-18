@@ -27,7 +27,7 @@ inputs:
 
 outputs:
   runner_name:
-    value: pippo # ${{ steps.create_github_runner.AZURE_CONTAINER_APP_NAME }}
+    value: steps.create_github_runner.AZURE_CONTAINER_APP_NAME
     description: 'Whether a new release was published'
 
 runs:
@@ -45,7 +45,6 @@ runs:
         id: create_github_runner
         shell: bash
         run: |
-          echo "pippo"
           TIMESTAMP=$(date +%s)
           SELF_HOSTED_RUNNER_IMAGE="ghcr.io/pagopa/github-self-hosted-runner:${{ inputs.self_hosted_runner_image_tag }}"
 
@@ -53,7 +52,7 @@ runs:
           AZURE_CONTAINER_APP_ENVIRONMENT_NAME="${{ inputs.container_app_environment_name }}"
           AZURE_CONTAINER_APP_NAME="runner-${{ github.run_id }}${TIMESTAMP}"
           echo "[INFO] AZURE_CONTAINER_APP_NAME: ${AZURE_CONTAINER_APP_NAME}"
-          echo "::set-output name=runner_name::${AZURE_CONTAINER_APP_NAME}"
+          echo "::set-output name=AZURE_CONTAINER_APP_NAME::${AZURE_CONTAINER_APP_NAME}"
 
           GITHUB_TOKEN=$(curl \
             -X POST \
