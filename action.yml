@@ -23,7 +23,7 @@ inputs:
     default: "v1.0.3@sha256:b1a04fdd800f06436b9dee0311292b640d8c2af333ce983d1877b7164b475c30"
 
 outputs:
-  runner_id:
+  runner_name:
     value: steps.create_github_runner.AZURE_CONTAINER_APP_NAME
     description: 'Whether a new release was published'
 
