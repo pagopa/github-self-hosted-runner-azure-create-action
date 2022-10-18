@@ -11,14 +11,14 @@ inputs:
   subscription_id:
     description: "Azure subscription Id"
     required: true
-  pat_token:
-    description: "GitHub PAT token to access to APIs to manage self hosted runner"
-    required: true
   container_app_environment_name:
     description: "Azure container app environment name"
     required: true
   resource_group_name:
     description: "Azure container app environment resource group name"
+    required: true
+  pat_token:
+    description: "GitHub PAT token to access to APIs to manage self hosted runner"
     required: true
   self_hosted_runner_image_tag:
     description: "Self hosted runner image tag from https://github.com/pagopa/github-self-hosted-runner/pkgs/container/github-self-hosted-runner"
@@ -27,7 +27,7 @@ inputs:
 
 outputs:
   runner_name:
-    # value: ${{ steps.create_github_runner.AZURE_CONTAINER_APP_NAME }}
+    value: ${{ steps.create_github_runner.AZURE_CONTAINER_APP_NAME }}
     description: 'Whether a new release was published'
 
 runs:
@@ -52,7 +52,7 @@ runs:
           AZURE_CONTAINER_APP_ENVIRONMENT_NAME="${{ inputs.container_app_environment_name }}"
           AZURE_CONTAINER_APP_NAME="runner-${{ github.run_id }}${TIMESTAMP}"
           echo "[INFO] AZURE_CONTAINER_APP_NAME: ${AZURE_CONTAINER_APP_NAME}"
-          echo "::set-output name=runner_name::${AZURE_CONTAINER_APP_NAME}"
+          echo "::set-output name=AZURE_CONTAINER_APP_NAME::${AZURE_CONTAINER_APP_NAME}"
 
           GITHUB_TOKEN=$(curl \
             -X POST \
