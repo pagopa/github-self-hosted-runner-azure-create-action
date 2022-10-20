@@ -23,7 +23,7 @@ inputs:
   self_hosted_runner_image_tag:
     description: "Self hosted runner image tag from https://github.com/pagopa/github-self-hosted-runner/pkgs/container/github-self-hosted-runner"
     required: true
-    default: "v1.0.3@sha256:b1a04fdd800f06436b9dee0311292b640d8c2af333ce983d1877b7164b475c30"
+    default: "v1.2.0@sha256:44ddb565579f88519aff54d437558afc37480cb5d8db37c451c4a97d73ad3a3b"
 
 outputs:
   runner_name:
@@ -74,10 +74,29 @@ runs:
 
           sleep 30
 
-          GITHUB_RUNNER_ID=$(curl \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ inputs.pat_token }}" \
-              https://api.github.com/repos/${{ github.repository }}/actions/runners | jq '.runners | map(select(.name | startswith("'${AZURE_CONTAINER_APP_NAME}'"))) | .[].id' -r)
+          START_TIME=$(date +%s)
+          while [ $(( $(date +%s) - 300 )) -lt $START_TIME ]; do
+
+            GITHUB_RUNNER_ID=$(curl \
+                -H "Accept: application/vnd.github+json" \
+                -H "Authorization: Bearer ${{ inputs.pat_token }}" \
+                https://api.github.com/repos/${{ github.repository }}/actions/runners | jq '.runners | map(select(.name | startswith("'${AZURE_CONTAINER_APP_NAME}'"))) | .[].id' -r)
+
+            if [ -n "$GITHUB_RUNNER_ID" ]
+            then
+              echo "[INFO] GITHUB_RUNNER_ID: ${GITHUB_RUNNER_ID} is NOT empty"
+              break
+            fi
+
+            sleep 5
+
+          done
+
+          if [ -z "$GITHUB_RUNNER_ID" ]
+          then
+            echo "[INFO] GITHUB_RUNNER_ID is empty"
+            exit 1
+          fi
 
           curl \
             -X PUT \
