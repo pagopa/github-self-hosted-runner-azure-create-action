@@ -21,9 +21,9 @@ inputs:
     description: "GitHub PAT token to access to APIs to manage self hosted runner"
     required: true
   self_hosted_runner_image_tag:
-    description: "Self hosted runner image tag from https://github.com/pagopa/github-self-hosted-runner/pkgs/container/github-self-hosted-runner"
+    description: "Self hosted runner image tag from https://github.com/pagopa/github-self-hosted-runner-azure/pkgs/container/github-self-hosted-runner-azure"
     required: true
-    default: "v1.2.0@sha256:44ddb565579f88519aff54d437558afc37480cb5d8db37c451c4a97d73ad3a3b"
+    default: "v1.0.0@sha256:b770f9168d238f22b7e577696c3341cae3dc1398461363cbcfd25548e34e90cc"
 
 outputs:
   runner_name:
@@ -46,7 +46,7 @@ runs:
         shell: bash
         run: |
           TIMESTAMP=$(date +%s)
-          SELF_HOSTED_RUNNER_IMAGE="ghcr.io/pagopa/github-self-hosted-runner:${{ inputs.self_hosted_runner_image_tag }}"
+          SELF_HOSTED_RUNNER_IMAGE="ghcr.io/pagopa/github-self-hosted-runner-azure:${{ inputs.self_hosted_runner_image_tag }}"
 
           AZURE_RESOURCE_GROUP_NAME="${{ inputs.resource_group_name }}"
           AZURE_CONTAINER_APP_ENVIRONMENT_NAME="${{ inputs.container_app_environment_name }}"
