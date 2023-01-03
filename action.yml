@@ -28,7 +28,7 @@ inputs:
 outputs:
   runner_name:
     value: ${{ steps.create_github_runner.outputs.AZURE_CONTAINER_APP_NAME }}
-    description: 'Whether a new release was published'
+    description: 'Azure Container App Name'
 
 runs:
   using: "composite"
