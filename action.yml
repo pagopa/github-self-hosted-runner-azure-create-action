@@ -45,6 +45,7 @@ runs:
         id: create_github_runner
         shell: bash
         run: |
+          ### 1) Configure runner names and ids
           TIMESTAMP=$(date +%s)
           SELF_HOSTED_RUNNER_IMAGE="ghcr.io/pagopa/github-self-hosted-runner-azure:${{ inputs.self_hosted_runner_image_tag }}"
 
@@ -54,12 +55,14 @@ runs:
           echo "[INFO] AZURE_CONTAINER_APP_NAME: ${AZURE_CONTAINER_APP_NAME}"
           echo "::set-output name=AZURE_CONTAINER_APP_NAME::${AZURE_CONTAINER_APP_NAME}"
 
+          ### 2) Create runner into linked to current GitHub Repository
           GITHUB_TOKEN=$(curl \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ inputs.pat_token }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/runners/registration-token | jq ".token" -r)
 
+          ### 3) Create container app linked to created runner
           az config set extension.use_dynamic_install=yes_without_prompt
 
           az containerapp create \
@@ -74,6 +77,7 @@ runs:
             GITHUB_REPOSITORY="https://github.com/${{ github.repository }}" \
             GITHUB_TOKEN=secretref:github-token
 
+          ### 4) Add label to GitHub runner
           sleep 30
 
           START_TIME=$(date +%s)
