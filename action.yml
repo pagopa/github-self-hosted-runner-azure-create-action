@@ -74,6 +74,6 @@ runs:
             --environment "${AZURE_CONTAINER_APP_ENVIRONMENT_NAME}" \
             --secrets github-token="${GITHUB_TOKEN}" \
             --env-vars \
-            LABELS="self-hosted,${AZURE_CONTAINER_APP_NAME}" \
+            LABELS="${AZURE_CONTAINER_APP_NAME}" \
             GITHUB_REPOSITORY="https://github.com/${{ github.repository }}" \
             GITHUB_TOKEN=secretref:github-token
