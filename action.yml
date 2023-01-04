@@ -69,6 +69,8 @@ runs:
             --name "${AZURE_CONTAINER_APP_NAME}" \
             --resource-group "${AZURE_RESOURCE_GROUP_NAME}" \
             --image "${SELF_HOSTED_RUNNER_IMAGE}" \
+            --min-replicas 1 \
+            --max-replicas 1 \
             --environment "${AZURE_CONTAINER_APP_ENVIRONMENT_NAME}" \
             --secrets github-token="${GITHUB_TOKEN}" \
             --env-vars \
