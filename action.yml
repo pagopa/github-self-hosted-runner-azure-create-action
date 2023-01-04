@@ -23,7 +23,7 @@ inputs:
   self_hosted_runner_image_tag:
     description: "Self hosted runner image tag from https://github.com/pagopa/github-self-hosted-runner-azure/pkgs/container/github-self-hosted-runner-azure"
     required: true
-    default: "v1.0.1@sha256:738e3c34e30774d66f84bf186cfd29c1b3911de52cd9fec894d4211a5c64fd9a"
+    default: "v1.0.2@sha256:a02800c885eb5146ae8633f8bcf8c4c9c8a0c60ef38c2b7f9c54c746d879ca78"
 
 outputs:
   runner_name:
@@ -74,6 +74,7 @@ runs:
             --environment "${AZURE_CONTAINER_APP_ENVIRONMENT_NAME}" \
             --secrets github-token="${GITHUB_TOKEN}" \
             --env-vars \
+            LABELS="self-hosted,${AZURE_CONTAINER_APP_NAME}" \
             GITHUB_REPOSITORY="https://github.com/${{ github.repository }}" \
             GITHUB_TOKEN=secretref:github-token
 
