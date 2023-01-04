@@ -69,8 +69,6 @@ runs:
             --name "${AZURE_CONTAINER_APP_NAME}" \
             --resource-group "${AZURE_RESOURCE_GROUP_NAME}" \
             --image "${SELF_HOSTED_RUNNER_IMAGE}" \
-            --ingress internal \
-            --target-port 8080 \
             --environment "${AZURE_CONTAINER_APP_ENVIRONMENT_NAME}" \
             --secrets github-token="${GITHUB_TOKEN}" \
             --env-vars \
